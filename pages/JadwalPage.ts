@@ -19,18 +19,16 @@ export class JadwalPage {
   }
 
   async openJadwal() {
-    await this.jadwalMenu.waitFor({
-      state: 'visible'
-    });
-
-    await this.jadwalMenu.click();
-
-    await expect(this.pageTitle).toHaveText(
-      'Jadwal Perkuliahan'
-    );
-
-    await expect(this.scheduleTable).toBeVisible();
-  }
+      await this.page.goto(
+        'https://siakad.polinema.ac.id/mahasiswa/jadwal/index'
+      );
+  
+      await expect(this.pageTitle).toHaveText(
+        'Jadwal Perkuliahan'
+      );
+  
+      await expect(this.scheduleTable).toBeVisible();
+    }
 
   getCourseRow(courseName: string) {
     return this.scheduleTable.getByRole('row').filter({
