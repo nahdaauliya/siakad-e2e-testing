@@ -20,11 +20,34 @@ export class DashboardPage {
     );
   }
 
-    async openAcademicMenu() {
-      if (!(await this.academicSubMenu.isVisible())) {
-        await this.academicMenu.click();
-      }
-
+  async openAcademicMenu() {
+      const getMenuState = async () => {
+        return await this.academicSubMenu.evaluate((element) => {
+          const style = window.getComputedStyle(element);
+          const parent = document.querySelector('#gm_akademik');
+        
+          return {
+            parentClass: parent?.getAttribute('class'),
+            inlineStyle: element.getAttribute('style'),
+            display: style.display,
+            visibility: style.visibility,
+            height: style.height
+          };
+        });
+      };
+  
+      console.log(
+        'SEBELUM KLIK:',
+        await getMenuState()
+      );
+  
+      await this.academicMenu.click();
+  
+      console.log(
+        'SESUDAH KLIK:',
+        await getMenuState()
+      );
+  
       await expect(this.academicSubMenu).toBeVisible();
     }
 }
