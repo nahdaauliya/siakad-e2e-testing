@@ -1,0 +1,59 @@
+name: Playwright E2E Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run E2E Tests
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Check test credentials
+        env:
+          SIAKAD_USERNAME: ${{ secrets.SIAKAD_USERNAME }}
+          SIAKAD_PASSWORD: ${{ secrets.SIAKAD_PASSWORD }}
+        run: |
+          if [ -z "$SIAKAD_USERNAME" ] || [ -z "$SIAKAD_PASSWORD" ]; then
+            echo "SIAKAD credentials are not configured."
+            exit 1
+          fi
+
+      - name: Run Playwright tests
+        run: npx playwright test --project=chromium --workers=1
+        env:
+          SIAKAD_USERNAME: ${{ secrets.SIAKAD_USERNAME }}
+          SIAKAD_PASSWORD: ${{ secrets.SIAKAD_PASSWORD }}
+
+      - name: Upload Playwright HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload Test Results and Traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: test-results/
+          retention-days: 14
