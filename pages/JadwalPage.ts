@@ -18,10 +18,12 @@ export class JadwalPage {
     this.scheduleTable = page.locator('#mytable');
   }
 
-  async openJadwal() {
-      await this.page.goto(
-        'https://siakad.polinema.ac.id/mahasiswa/jadwal/index'
-      );
+    async openJadwal() {
+      await this.jadwalMenu.waitFor({
+        state: 'visible'
+      });
+  
+      await this.jadwalMenu.click();
   
       await expect(this.pageTitle).toHaveText(
         'Jadwal Perkuliahan'

@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class DashboardPage {
   readonly page: Page;
@@ -20,13 +20,11 @@ export class DashboardPage {
     );
   }
 
-  async openAcademicMenu() {
-    if (!(await this.academicSubMenu.isVisible())) {
-      await this.academicMenu.click();
-    }
+    async openAcademicMenu() {
+      if (!(await this.academicSubMenu.isVisible())) {
+        await this.academicMenu.click();
+      }
 
-    await this.academicSubMenu.waitFor({
-      state: 'visible'
-    });
-  }
+      await expect(this.academicSubMenu).toBeVisible();
+    }
 }
