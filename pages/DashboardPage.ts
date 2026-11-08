@@ -21,6 +21,7 @@ export class DashboardPage {
   }
 
   async openAcademicMenu() {
+    await this.page.waitForLoadState('domcontentloaded');
     await this.academicMenu.hover();
 
     if (!(await this.academicSubMenu.isVisible())) {
