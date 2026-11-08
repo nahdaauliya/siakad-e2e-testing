@@ -1,3 +1,4 @@
+
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
@@ -5,16 +6,17 @@ import { JadwalPage } from '../pages/JadwalPage';
 
 test.describe('SIAKAD Polinema - Academic Information', () => {
   test('Mahasiswa berhasil melihat jadwal perkuliahan', async ({ page }) => {
-    const username = process.env.SIAKAD_USERNAME;
-    const password = process.env.SIAKAD_PASSWORD;
-
-    test.skip(!username || !password, 'Kredensial pengujian belum dikonfigurasi');
-    test('Mahasiswa berhasil melihat jadwal perkuliahan', async ({ page }) => {
-    page.on('pageerror', error => {
+    page.on('pageerror', (error) => {
       console.log('JAVASCRIPT ERROR:', error.message);
     });
 
-  // Lanjutkan kode test yang sudah ada
+    const username = process.env.SIAKAD_USERNAME;
+    const password = process.env.SIAKAD_PASSWORD;
+
+    test.skip(
+      !username || !password,
+      'Kredensial pengujian belum dikonfigurasi'
+    );
 
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
